@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Classes</title>
+    <!-- Include Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+    <div class="max-w-7xl mx-auto mt-10 p-6">
+        <div class="flex justify-between items-center p-4 mb-2">
+            <h1 class="text-3xl font-extrabold text-blue-600">Your Classes</h1>
+            {% comment %} <div class="relative">
+                <h2 class="mb-4 text-center font-serif text-3xl font-bold text-blue-900 md:mb-6 md:text-4xl">Your Courses</h2>
+              </div> {% endcomment %}
+            <div>
+                <a 
+                    href="{% url 'create_class' %}" 
+                    class="mr-4 inline-flex items-center px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-md hover:bg-green-600 transition"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Create Class
+                </a>
+                <a 
+                    href="{% url 'logout' %}" 
+                    class="inline-flex items-center px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md hover:bg-red-600 transition"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V5m0 10V5"/>
+                    </svg>
+                    Log Out
+                </a>
+            </div>
+        </div>
+        
+       
+        {% if request.GET.message %}
+        <div style="color: green; margin-bottom: 20px;">
+            {{ request.GET.message }}
+        </div>
+        {% endif %}
+        <section class="py-6 sm:py-8 lg:py-12">
+            <div class="mx-auto max-w-screen-xl px-4 md:px-8">
+              <!-- Heading -->
+           
+              <!-- /Heading -->
+              <div class="grid gap-8 sm:grid-cols-2 sm:gap-12 lg:grid-cols-3">
+                {% for class in classes %}
+                <!-- Article -->
+                <article class="relative select-none bg-blue-50 px-8 pt-10 pb-20 text-blue-900 shadow-md rounded-sm hover:shadow-lg cursor-pointer">
+                  <h1 class="text-sm uppercase">{{ class.description }}</h1>
+                  <h1 class="text-lg font-semibold mb-4">{{ class.name }}</h1>
+                  <div class="px-2">
+                  <p class="text-sm text-gray-600 mb-1">
+                    <span class="font-semibold">State:</span> {{ class.courseState }}
+                </p>
+                <p class="text-sm text-gray-600 mb-1">
+                    <span class="font-semibold">Section:</span> {{ class.section }}
+                </p>
+                <p class="text-sm text-gray-600">
+                    <span class="font-semibold">Owner:</span> {{ class.ownerId }}
+                </p>
+            </div>
+                
+
+                  <a href="#" class="absolute bottom-0 right-0 flex h-12 w-12 items-center justify-center bg-blue-500 text-white transition-all hover:w-16">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </a>
+                </article>
+                <!-- /Article -->
+                {% endfor %}
+          
+                
+              </div>
+            </div>
+          </section>
+               
+
+        
+    </div>
+</body>
+</html>
