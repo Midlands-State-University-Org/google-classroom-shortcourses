@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from google_auth_oauthlib.flow import Flow
 from django.http import HttpResponseRedirect
 from django.conf import settings
@@ -18,6 +18,34 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 def home(request):
     return render(request, 'home.html')
+
+
+def landing_page(request):
+    
+    # Query all classes from the Course table
+    courses = Course.objects.order_by('-datecreated')
+
+    # Render the landing page template
+    return render(request, 'landing.html', {'courses': courses})
+
+def courses(request):
+    
+    # Query all classes from the Course table
+    courses = Course.objects.order_by('-datecreated')
+
+    # Render the landing page template
+    return render(request, 'courses.html', {'courses': courses})
+
+
+def course_detail(request, courseid):
+    """
+    View to display details of a single course.
+    """
+    # Fetch the course using the provided ID or show a 404 if not found
+    course = get_object_or_404(Course, id=courseid)
+
+    # Render the course detail template
+    return render(request, 'course-detail.html', {'course': course})
 
 def google_classroom_login(request):
     credentials_path = os.path.join(settings.BASE_DIR, 'credentials.json')
@@ -334,4 +362,4 @@ def logout_view(request):
     logout(request)  
     
     # Redirect to the login page or home page
-    return redirect('home') 
+    return redirect('landing') 

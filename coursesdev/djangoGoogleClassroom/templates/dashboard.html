@@ -42,44 +42,43 @@
             {{ request.GET.message }}
         </div>
         {% endif %}
-        <section class="py-6 sm:py-8 lg:py-12">
-            <div class="mx-auto max-w-screen-xl px-4 md:px-8">
-              <!-- Heading -->
-           
-              <!-- /Heading -->
-              <div class="grid gap-8 sm:grid-cols-2 sm:gap-12 lg:grid-cols-3">
+        <div class="min-h-screen p-2 font-sans">
+            <div class="max-w-4xl max-lg:max-w-2xl max-sm:max-w-sm mx-auto">
+              <h2 class="text-2xl font-extrabold text-gray-800 mb-8"></h2>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {% for class in classes %}
-                <!-- Article -->
-                <article class="relative select-none bg-blue-50 px-8 pt-10 pb-20 text-blue-900 shadow-md rounded-sm hover:shadow-lg cursor-pointer">
-                  <h1 class="text-sm uppercase">{{ class.description }}</h1>
-                  <h1 class="text-lg font-semibold mb-4">{{ class.name }}</h1>
-                  <div class="px-2">
-                  <p class="text-sm text-gray-600 mb-1">
-                    <span class="font-semibold">State:</span> {{ class.courseState }}
-                </p>
-                <p class="text-sm text-gray-600 mb-1">
-                    <span class="font-semibold">Section:</span> {{ class.section }}
-                </p>
-                <p class="text-sm text-gray-600">
-                    <span class="font-semibold">Owner:</span> {{ class.ownerId }}
-                </p>
-            </div>
+                <div class="bg-white hover:shadow-md rounded-2xl p-6">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 512 512">
+                    <g fill-rule="evenodd" clip-rule="evenodd">
+                      <path fill="#ff405c" d="M255.997.007c-141.156 0-256 114.844-256 256 0 141.16 114.844 256 256 256 141.16 0 256.004-114.84 256.004-256C512 114.851 397.157.007 255.997.007z" data-original="#ff405c" />
+                      <path fill="#d01273" d="M269.845 511.629c110.122-5.9 201.974-81.716 231.869-183.747l-99.461-99.461a12.002 12.002 0 0 0-1.223-1.135l-137.504-110.9a11.994 11.994 0 0 0-15.061 0l-137.5 110.9a12.01 12.01 0 0 0-3.788 13.337 12.008 12.008 0 0 0 3.109 4.757l39.179 39.186v101.722a11.97 11.97 0 0 0 3.796 8.758z" data-original="#d01273" />
+                      <path fill="#fff" d="M350.528 224.627c-6.632 0-11.999 5.372-11.999 11.999V374.29h-35.472v-93.423c0-6.627-5.367-11.999-11.999-11.999H220.94c-6.631 0-11.999 5.372-11.999 11.999v93.423h-35.472V236.626c0-6.627-5.372-11.999-11.999-11.999h-8.983l103.509-83.484 103.514 83.484zm50.503 2.659-137.504-110.9a11.992 11.992 0 0 0-15.06 0l-137.5 110.9a12.01 12.01 0 0 0-3.788 13.337 12.008 12.008 0 0 0 11.318 8.006h30.97v137.66c0 6.627 5.372 12.003 12.003 12.003h59.469c6.619 0 11.999-5.376 11.999-12.003v-93.423h46.12v93.423c0 6.627 5.38 12.003 11.999 12.003h59.47c6.631 0 12.003-5.376 12.003-12.003v-137.66h30.97c5.088 0 9.619-3.209 11.318-8.006a12.009 12.009 0 0 0-3.787-13.337z" data-original="#ffffff" />
+                    </g>
+                  </svg>
+                  <div class="mt-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">{{ class.name }}</h3>
+                    <p class="text-gray-800 text-sm mb-4">{{ class.description }}</p>
+                    <a href="https://classroom.google.com/u/{{ class.googleclassroomid }}" target="_blank" class="mt-6">
+                      <button type="button" class="flex items-center font-semibold flex-wrap justify-between gap-2 border rounded-3xl pl-5 pr-3 h-14 w-full hover:bg-blue-100 transition-all duration-300">
+                        Google Classroom
+                        <div class="w-11 h-11 rounded-full bg-blue-200 flex justify-center items-center">
+                          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <mask x="0" y="0" width="18" height="18">
+                              <rect width="18" height="18" fill="#D9D9D9"></rect>
+                            </mask>
+                            <g mask="url(#mask0_2085_52)">
+                              <path d="M12.1313 9.75H3V8.25H12.1313L7.93125 4.05L9 3L15 9L9 15L7.93125 13.95L12.1313 9.75Z" fill="#222222"></path>
+                            </g>
+                          </svg>
+                        </div>
+                      </button>
+                    </a>
+                  </div>
+                </div>
+                {%endfor%}
+      
                 
 
-                  <a href="#" class="absolute bottom-0 right-0 flex h-12 w-12 items-center justify-center bg-blue-500 text-white transition-all hover:w-16">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  </a>
-                </article>
-                <!-- /Article -->
-                {% endfor %}
-          
-                
-              </div>
-            </div>
-          </section>
-               
 
         
     </div>
