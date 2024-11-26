@@ -8,7 +8,8 @@ from googleapiclient.errors import HttpError
 import os
 import json
 from django.utils.timezone import now
-from .models import Course
+from .models import Course, CourseImage
+from .forms import CourseForm, CourseImageForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 
@@ -210,79 +211,10 @@ def error_page(request):
 
 
 # @login_required
-def create_class(request):
-    """
-    View to render a form for class creation, save details to the database, 
-    and create a class in Google Classroom.
-    """
-    # Handle GET request: Render the form
-    if request.method == 'GET':
-        return render(request, 'create_class.html')
-
-    # Handle POST request: Process form submission
-    elif request.method == 'POST':
-        # Get form data
-        name = request.POST.get('name')
-        description = request.POST.get('description')
-        price = request.POST.get('price')
-        alias = request.POST.get('alias', 'p')
-        
-
-        # Retrieve and deserialize credentials from the session
-        credentials_json = request.session.get('google_credentials')
-        if not credentials_json:
-            return HttpResponseRedirect('/login/')  # Redirect to login if credentials are missing
-
-        try:
-            credentials_info = json.loads(credentials_json)
-            credentials = Credentials.from_authorized_user_info(credentials_info)
-        except Exception as e:
-            return HttpResponseRedirect(f'/error-page/?error_message=Failed to load credentials: {str(e)}')
-
-        # Create a class in Google Classroom
-        try:
-            service = build('classroom', 'v1', credentials=credentials)
-
-            new_class = {
-                'name': name,
-                'descriptionHeading': description[:100],  # Classroom description header has a limit
-                'description': description,
-                'ownerId': 'me',  # 'me' refers to the authenticated user
-            }
-
-            created_class = service.courses().create(body=new_class).execute()
-
-            # Save class details to the database
-            course = Course.objects.create(
-                name=name,
-                description=description,
-                price=price,
-                ownerid=created_class['ownerId'],  # Assuming the logged-in user's email is available
-                datecreated=now(),
-                alias=alias,
-                googleclassroomid=created_class['id'],  # Use the ID returned by Google Classroom
-            )
-            
-            # Redirect to the dashboard with a success message and Google Classroom link
-            # google_classroom_url = created_class.get('courseGroup', '')
-            # return HttpResponseRedirect(f'/dashboard/?message=Class+created+successfully&google_classroom_url={google_classroom_url}')
-
-            # Redirect to the dashboard with a success message
-            return HttpResponseRedirect('/dashboard/?message=Class+created+successfully')
-
-        except HttpError as e:
-            print(f"Google API Error: {e}")
-            return HttpResponseRedirect(f'/error-page/?error_message=Failed+to+create+class:+{e}')
-        except Exception as e:
-            print(f"Unexpected error: {e}")
-            return HttpResponseRedirect(f'/error-page/?error_message=An+unexpected+error+occurred:+{e}')
-
-
-
 # def create_class(request):
 #     """
 #     View to render a form for class creation, save details to the database, 
-#     and create a class in Google Classroom with alias.
+#     and create a class in Google Classroom.
 #     """
 #     # Handle GET request: Render the form
 #     if request.method == 'GET':
@@ -295,6 +227,7 @@ def create_class(request):
 #         description = request.POST.get('description')
 #         price = request.POST.get('price')
 #         alias = request.POST.get('alias', 'p')
+        
 
 #         # Retrieve and deserialize credentials from the session
 #         credentials_json = request.session.get('google_credentials')
@@ -311,40 +244,95 @@ def create_class(request):
 #         try:
 #             service = build('classroom', 'v1', credentials=credentials)
 
-#             # Prepare the new class data
 #             new_class = {
 #                 'name': name,
-#                 'descriptionHeading': description[:100],  # Classroom description header limit
+#                 'descriptionHeading': description[:100],  # Classroom description header has a limit
 #                 'description': description,
 #                 'ownerId': 'me',  # 'me' refers to the authenticated user
 #             }
 
-#             # Create the class in Google Classroom
 #             created_class = service.courses().create(body=new_class).execute()
-
-#             # Add alias to the created class
-#             service.courses().aliases().create(
-#                 courseId=created_class['id'], 
-#                 body={'alias': f'd:p:{alias}'}
-#             ).execute()
 
 #             # Save class details to the database
 #             course = Course.objects.create(
 #                 name=name,
 #                 description=description,
 #                 price=price,
-#                 ownerid=created_class['ownerId'],# Save the ownerId from Google Classroom API response
-#                 alias=alias,
+#                 ownerid=created_class['ownerId'],  # Assuming the logged-in user's email is available
 #                 datecreated=now(),
+#                 alias=alias,
 #                 googleclassroomid=created_class['id'],  # Use the ID returned by Google Classroom
 #             )
+            
+#             # Redirect to the dashboard with a success message and Google Classroom link
+#             # google_classroom_url = created_class.get('courseGroup', '')
+#             # return HttpResponseRedirect(f'/dashboard/?message=Class+created+successfully&google_classroom_url={google_classroom_url}')
 
-#             # Redirect to dashboard with message and Google Classroom link
-#             return HttpResponseRedirect(f'/dashboard/?message=Class+created+successfully')
+#             # Redirect to the dashboard with a success message
+#             return HttpResponseRedirect('/dashboard/?message=Class+created+successfully')
 
+#         except HttpError as e:
+#             print(f"Google API Error: {e}")
+#             return HttpResponseRedirect(f'/error-page/?error_message=Failed+to+create+class:+{e}')
 #         except Exception as e:
-#             # Handle any errors
-#             return HttpResponseRedirect(f'/error-page/?error_message=Failed+to+create+class:+{str(e)}')
+#             print(f"Unexpected error: {e}")
+#             return HttpResponseRedirect(f'/error-page/?error_message=An+unexpected+error+occurred:+{e}')
+
+
+
+def create_class(request):
+    """
+    View to render a form for class creation, save details to the database, 
+    and create a class in Google Classroom.
+    """
+    if request.method == 'POST':
+        # Initialize forms with submitted data and files
+        course_form = CourseForm(request.POST)
+        image_form = CourseImageForm(request.POST, request.FILES)
+
+        if course_form.is_valid() and image_form.is_valid():
+            # Save course details to the database
+            course = course_form.save(commit=False)
+
+            # Retrieve Google credentials from the session
+            credentials_json = request.session.get('google_credentials')
+            if not credentials_json:
+                return HttpResponseRedirect('/login/')  # Redirect to login if credentials are missing
+
+            try:
+                credentials_info = json.loads(credentials_json)
+                credentials = Credentials.from_authorized_user_info(credentials_info)
+            except Exception as e:
+                return HttpResponseRedirect(f'/error-page/?error_message=Failed to load credentials: {str(e)}')
+
+            # Create a class in Google Classroom
+            try:
+                service = build('classroom', 'v1', credentials=credentials)
+                new_class = {
+                    'name': course.name,
+                    'descriptionHeading': course.description[:100],  # Limit to 100 chars
+                    'description': course.description,
+                    'ownerId': 'me',
+                }
+                created_class = service.courses().create(body=new_class).execute()
+                course.googleclassroomid = created_class['id']
+                course.ownerid = created_class['ownerId']
+                course.save()
+
+                # Save course image
+                course_image = image_form.save(commit=False)
+                course_image.course = course
+                course_image.save()
+
+                return HttpResponseRedirect('/dashboard/?message=Class+created+successfully')
+            except Exception as e:
+                return HttpResponseRedirect(f'/error-page/?error_message=Failed to create class: {str(e)}')
+    else:
+        # Render blank forms for GET request
+        course_form = CourseForm()
+        image_form = CourseImageForm()
+
+    return render(request, 'create_class.html', {'course_form': course_form, 'image_form': image_form})
 
 
 
@@ -362,4 +350,4 @@ def logout_view(request):
     logout(request)  
     
     # Redirect to the login page or home page
-    return redirect('landing') 
+    return redirect('home') 

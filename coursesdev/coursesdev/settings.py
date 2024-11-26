@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djangoGoogleClassroom',
+    'crispy_forms',
+    'crispy_tailwind',
 ]
 
 MIDDLEWARE = [
@@ -119,6 +121,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+MEDIA_URL = 'media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -133,6 +139,9 @@ SCOPES = [
 
 GOOGLE_OAUTH2_CLIENT_SECRETS_JSON = os.path.join(BASE_DIR / 'credentials.json')
 GOOGLE_OAUTH2_SCOPES = SCOPES
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+CRISPY_TEMPLATE_PACK = "tailwind"
 
 # SESSION_COOKIE_SECURE = True  # Use this in production to ensure cookies are sent over HTTPS
 

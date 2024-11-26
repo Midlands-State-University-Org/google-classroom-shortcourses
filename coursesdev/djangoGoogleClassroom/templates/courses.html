@@ -37,9 +37,14 @@
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16 max-lg:max-w-3xl max-md:max-w-md mx-auto">
             {% for course in courses %}
             <a href="/dashboard/?course_id={{ course.id }}" class="bg-white cursor-pointer rounded-lg overflow-hidden shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] relative group">
-              <img src="https://readymadeui.com/Imagination.webp" alt="Blog Post 1" class="w-full h-96 object-cover" />
+              {% comment %} <img src="https://readymadeui.com/Imagination.webp" alt="Blog Post 1" class="w-full h-96 object-cover" /> {% endcomment %}
+              {% if course.courseimage %}
+                <img src="{{ course.courseimage.imagepath.url }}" alt="{{ course.name }}" class="w-full h-60 object-cover group-hover:scale-125 transition-all duration-300" >
+            {% else %}
+                <p class="text-gray-500">No image available</p>
+            {% endif %}
               <div class="p-6 absolute bottom-0 left-0 right-0 bg-blue-200 opacity-90">
-                <span class="text-sm block text-gray-800 mb-2">10 FEB 2023 | ${{ course.price }}</span>
+                <span class="text-sm block text-gray-800 mb-2">{{ course.startdate }} | ${{ course.price }}</span>
                 <h3 class="text-xl font-bold text-gray-800">{{ course.name }}</h3>
                 <div class="h-0 overflow-hidden group-hover:h-16 group-hover:mt-4 transition-all duration-300">
                   <p class="text-gray-800 text-sm">{{ course.description }}</p>
@@ -53,11 +58,11 @@
         </div>
     </div>
 
-    <footer class="bg-gray-800 text-white py-4 mt-8">
+    {% comment %} <footer class="bg-gray-800 text-white py-4 mt-8">
         <div class="container mx-auto text-center">
             <p>&copy; {{ year }} CourseHub. All rights reserved.</p>
         </div>
-    </footer>
+    </footer> {% endcomment %}
 
 </body>
 </html>

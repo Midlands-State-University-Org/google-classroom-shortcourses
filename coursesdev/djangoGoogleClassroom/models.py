@@ -10,8 +10,16 @@ class Course(models.Model):
     ownerid = models.CharField(max_length=255)
     alias = models.CharField(max_length=100, default='p')
     datecreated = models.DateTimeField(default=now)
-    # startdate = models.DateField(default=date.today)
+    startdate = models.DateField(default=date.today)
     googleclassroomid = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.name
+
+
+class CourseImage(models.Model):
+    course = models.OneToOneField(Course, on_delete=models.CASCADE, primary_key=True)
+    imagepath = models.ImageField(default='fallback.jpg', blank=True)  
+
+    def __str__(self):
+        return f"Image for {self.course.name}"

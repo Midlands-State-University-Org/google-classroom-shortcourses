@@ -7,14 +7,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center mt-16">
-    <div class="text-center bg-white shadow-md rounded-lg p-8 max-w-md">
-        <h1 class="text-4xl font-bold text-blue-600 mb-4">Welcome Home</h1>
-        <p class="text-gray-700 font-semibold text-lg mb-6">
-            Google Classroom Courses
-        </p>
-        <a href="{% url 'login' %}" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 transition">
-            Get Started
-        </a>
-    </div>
+
+      <div class="bg-[#182b50] rounded-md px-8 py-16 font-[sans-serif]">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 justify-center items-center gap-12">
+          <div class="text-center md:text-left">
+            <h2 class="text-4xl lg:text-5xl font-extrabold text-white mb-6 md:!leading-[55px]">Welcome to Our Courses Platform</h2>
+            <p class="text-lg lg:text-xl text-white mb-4">Experience excellence like never before with this platform create your google classes!</p>
+            <a href="{% url 'login' %}" class="bg-blue-600 text-white text-lg tracking-wide px-8 py-2.5 rounded-full transition duration-300 ease-in-out shadow-lg hover:shadow-xl">
+                Get Started
+            </a>
+          </div>
+          <div class="text-center">
+            {% comment %} <img src="https://readymadeui.com/management-img.webp" alt="Premium Benefits" class="w-full mx-auto" /> {% endcomment %}
+          </div>
+        </div>
+      </div>
+   
 </body>
 </html>

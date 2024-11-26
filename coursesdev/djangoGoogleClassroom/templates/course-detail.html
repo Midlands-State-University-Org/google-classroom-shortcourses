@@ -18,7 +18,11 @@
           <div>
             <div class="flex gap-4 text-center">
               <div class="bg-gray-100 p-4 flex items-center sm:h-[380px] rounded">
-                <img src="https://readymadeui.com/analtsis.webp" alt="banner img" class="w-full h-full object-cover" />
+                {% if course.courseimage %}
+                <img src="{{ course.courseimage.imagepath.url }}" alt="{{ course.name }}" class="w-full h-60 object-cover group-hover:scale-125 transition-all duration-300" >
+            {% else %}
+                <p class="text-gray-500">No image available</p>
+            {% endif %}
               </div>
   
               <div class="space-y-4">
