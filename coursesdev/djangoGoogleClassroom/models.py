@@ -12,6 +12,14 @@ class Course(models.Model):
     datecreated = models.DateTimeField(default=now)
     startdate = models.DateField(default=date.today)
     googleclassroomid = models.CharField(max_length=255, unique=True)
+    
+    
+    
+    
+    def get_google_classroom_url(self):
+        if self.googleclassroomid:
+            return f"https://classroom.google.com/c/{self.googleclassroomid}"
+        return "#"
 
     def __str__(self):
         return self.name

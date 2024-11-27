@@ -48,6 +48,17 @@ def course_detail(request, courseid):
     # Render the course detail template
     return render(request, 'course-detail.html', {'course': course})
 
+
+def course_checkout(request, courseid):
+    """
+    View to display details of a single course.
+    """
+    # Fetch the course using the provided ID or show a 404 if not found
+    course = get_object_or_404(Course, id=courseid)
+
+    # Render the course detail template
+    return render(request, 'course-checkout.html', {'course': course})
+
 def google_classroom_login(request):
     credentials_path = os.path.join(settings.BASE_DIR, 'credentials.json')
 

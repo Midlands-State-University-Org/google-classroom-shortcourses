@@ -36,8 +36,7 @@
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16 max-lg:max-w-3xl max-md:max-w-md mx-auto">
             {% for course in courses %}
-            <a href="/dashboard/?course_id={{ course.id }}" class="bg-white cursor-pointer rounded-lg overflow-hidden shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] relative group">
-              {% comment %} <img src="https://readymadeui.com/Imagination.webp" alt="Blog Post 1" class="w-full h-96 object-cover" /> {% endcomment %}
+            <a href="{% url 'course_detail' course.id %}" class="bg-white cursor-pointer rounded-lg overflow-hidden shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] relative group">
               {% if course.courseimage %}
                 <img src="{{ course.courseimage.imagepath.url }}" alt="{{ course.name }}" class="w-full h-60 object-cover group-hover:scale-125 transition-all duration-300" >
             {% else %}
